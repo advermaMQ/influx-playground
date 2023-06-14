@@ -1,5 +1,6 @@
 from influxdb_client import InfluxDBClient as InfluxDBClient_V2
 from influxdb_client import Point
+from influxdb_client.client.write_api import SYNCHRONOUS
 import requests
 
 import time
@@ -64,7 +65,7 @@ def measure(nmeas=0):
     '''insert dummy measurements to the db.
     nmeas = 0 means : insert measurements forever. 
     '''
-    write_api = client.write_api()
+    write_api = client.write_api(write_options=SYNCHRONOUS)
     i = 0
     if nmeas==0:
         nmeas = sys.maxsize
@@ -90,7 +91,6 @@ def measure(nmeas=0):
             print(f"ERROR in writing record: {data}")
             sys.exit(-1)
 
-        time.sleep(2)
 
 def get_entries():
     '''returns all entries in the database.'''
